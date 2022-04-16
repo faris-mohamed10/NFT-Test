@@ -6,17 +6,19 @@ const contractAddress = "0x6dfE505e9Ecf24d534B581dc157288b708b0669d";
 const abi = contract.abi;
 
 function App() {
+  //setting the account from the MetaMask
   const [currentAccount, setCurrentAccount] = useState(null);
+  //Checking the MetaMask is installed in the browser
   const checkWalletIsConnected = async () => {
     const { ethereum } = window;
-
+    //Checking the MetaMask has been injected
     if (!ethereum) {
       console.log("Make Sure you have a MetaMask wallet installed or injected");
       return;
     } else {
       console.log("Wallet exists! We're ready to go..!!");
     }
-
+    //Finding the active Account in Wallet using ethereum.request({method :"eth_accounts"})
     const accounts = await ethereum.request({ method: "eth_accounts" });
     if (accounts.length !== 0) {
       const account = accounts[0];
@@ -28,10 +30,13 @@ function App() {
   };
   const connectWalletHandler = async () => {
     const { ethereum } = window;
-
+    // It attempts to request Metamask for accounts that are connected.
+    // If Metamask is already connected, it obliges by giving the function a list of accounts.
+    //If not an empty list is returned.
     if (!ethereum) {
       alert("Please install MetaMask wallet");
     }
+    //Accesing the account
     try {
       const accounts = await ethereum.request({
         method: "eth_requestAccounts",
@@ -42,16 +47,18 @@ function App() {
       console.log(error);
     }
   };
-
+  //Minting the NFT
   const mintNftHandler = async () => {
     try {
       const { ethereum } = window;
 
       if (ethereum) {
+        //If ethereum exists, it sets Metamask as the RPC provider.
+        //Will be issuing requests to the miners using your Metamask wallet.
         const provider = new ethers.providers.Web3Provider(ethereum);
         const signer = provider.getSigner();
         const nftContract = new ethers.Contract(contractAddress, abi, signer);
-
+        //Initilizing the payment, Gets a prompt from the MetaMask to pay 0.01 ETH as the price
         console.log("Initialize payment");
         let nftTxn = await nftContract.mintNFTs(1, {
           value: ethers.utils.parseEther("0.01"),
