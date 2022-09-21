@@ -2,7 +2,7 @@ import "./App.css";
 import { useEffect, useState } from "react";
 import contract from "./contracts/NFTCollectible.json";
 import { ethers } from "ethers";
-const contractAddress = "0x6dfE505e9Ecf24d534B581dc157288b708b0669d";
+const contractAddress = "0x5022FE07bfc85E1383171cf07989e92001EcDCAb";
 const abi = contract.abi;
 
 function App() {
@@ -60,9 +60,12 @@ function App() {
         const nftContract = new ethers.Contract(contractAddress, abi, signer);
         //Initilizing the payment, Gets a prompt from the MetaMask to pay 0.01 ETH as the price
         console.log("Initialize payment");
-        let nftTxn = await nftContract.mintNFTs(1, {
-          value: ethers.utils.parseEther("0.01"),
-        });
+        console.log(nftContract);
+        // let nftTxn = await nftContract.mintNFTs(1, {
+        //   value: ethers.utils.parseEther("0.01"),
+        // });
+
+        let nftTxn = await nftContract.approve(currentAccount, "123");
 
         console.log("Mining... please wait");
         await nftTxn.wait();
@@ -77,6 +80,7 @@ function App() {
       console.log(err);
     }
   };
+
   const connectWalletButton = () => {
     return (
       <button
