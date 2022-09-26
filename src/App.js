@@ -60,12 +60,8 @@ function App() {
         const nftContract = new ethers.Contract(contractAddress, abi, signer);
         //Initilizing the payment, Gets a prompt from the MetaMask to pay 0.01 ETH as the price
         console.log("Initialize payment");
-        console.log(nftContract);
-        // let nftTxn = await nftContract.mintNFTs(1, {
-        //   value: ethers.utils.parseEther("0.01"),
-        // });
-
-        let nftTxn = await nftContract.approve(currentAccount, "123");
+        console.log(typeof currentAccount);
+        let nftTxn = await nftContract.safeMint(currentAccount, 2);
 
         console.log("Mining... please wait");
         await nftTxn.wait();
